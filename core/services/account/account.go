@@ -4,25 +4,33 @@ import (
 	"example.com/test_task/core/domain"
 )
 
-func (s *service) Get(id string) (*domain.Account, error) {
+func (s *service) Get(id string) (*domain.Account, []domain.Transaction, error) {
 
 	account, err := s.accountsRepo.Get(id)
 	if err != nil {
-		return nil,err
+		return nil, nil, err
+	}
+	transactions, err := s.transactionsRepo.GetByAccountID(id)
+	if err != nil {
+		return account, nil, err
 	}
 
-	return account, nil
+	return account, transactions,nil
 }
 
 func (s *service) SetBalance(id, mode string, balance float64) (*domain.Account, error) {
 
 	account, err := s.accountsRepo.Get(id)
 	if err != nil {
-		return nil,err
+		return nil, err
+	}
+
+	if account == nil {
+		return nil, nil
 	}
 
 	switch mode {
-	case "credit":
+	case "transactions":
 		account.CreditBalance = balance
 	case "debit":
 		account.DebitBalance = balance
@@ -30,7 +38,7 @@ func (s *service) SetBalance(id, mode string, balance float64) (*domain.Account,
 
 	err = s.accountsRepo.Save(account)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	return account, nil

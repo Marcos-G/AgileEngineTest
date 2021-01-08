@@ -17,6 +17,10 @@ func (client *AccountsClient) Get(id string) ([]byte, error) {
 }
 
 func  (client *AccountsClient)Save(id string,value []byte) error {
+	if client.storage == nil{
+		client.storage = map[string][]byte{}
+	}
+
 	client.storage[id] = value
 	return nil
 }
@@ -42,7 +46,14 @@ func (client *TransactionsClient) GetBy(field,value string) ([][]byte, error) {
 }
 
 func  (client *TransactionsClient)Save(id string,value []byte) error {
+	if client.storage == nil{
+		client.storage = map[string][]byte{}
+	}
+	if client.storageByAccount == nil{
+		client.storageByAccount =  map[string][][]byte{}
+	}
+
 	client.storage[id] = value
-	client.storageByAccount["uniqueAccount"] = append(client.storageByAccount["uniqueAccount"],value)
+	client.storageByAccount["uniqueAccount"] = append(client.storageByAccount["unique_account"],value)
 	return nil
 }

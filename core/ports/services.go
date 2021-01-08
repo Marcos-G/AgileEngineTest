@@ -1,18 +1,13 @@
 package ports
 
-import "example.com/test_task/AgileEngineTest/core/domain"
+import "example.com/test_task/core/domain"
 
 type AccountsService interface {
-	Get(id string) (*domain.Account,error)
+	Get(id string) (*domain.Account,[]domain.Transaction,error)
 	SetBalance(id ,mode string, balance float64) (*domain.Account,error)
 }
 
-type DebitService interface {
-	Get(id string) (*domain.Transaction,error)
-	Authorize(transaction *domain.Transaction) (*domain.Transaction,error)
-}
-
-type CreditService interface {
+type TransactionsService interface {
 	Get(id string) (*domain.Transaction,error)
 	Authorize(transaction *domain.Transaction) (*domain.Transaction,error)
 }

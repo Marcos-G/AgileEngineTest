@@ -1,8 +1,9 @@
 package http
 
 import (
-	"example.com/test_task/AgileEngineTest/http/handlers/account"
-	"example.com/test_task/AgileEngineTest/http/handlers/transaction"
+	"example.com/test_task/dependencies"
+	"example.com/test_task/http/handlers/account"
+	"example.com/test_task/http/handlers/transaction"
 	"fmt"
 	"github.com/go-chi/chi"
 	"net/http"
@@ -18,13 +19,14 @@ func Start() {
 func Router() *chi.Mux {
 	r := chi.NewRouter()
 
-	r.Get("/account/{id}", account.Get)
+	accountHandler := account.New(dependencies.AccountService)
+	transactionHandler := transaction.New(dependencies.TransactionsService)
 
-	r.Post("/transaction/debit", transaction.Post)
-	r.Get("/transaction/debit/{id}", transaction.Get)
+	r.Get("/account", accountHandler.Get)
+	r.Put("/account/{mode}/balance", accountHandler.PutBalance)
 
-	r.Post("/transaction/credit", transaction.Post)
-	r.Get("/transaction/credit/{id}", transaction.Get)
+	r.Post("/transaction", transactionHandler.Post)
+	r.Get("/transaction/{id}", transactionHandler.Get)
 
 	return r
 }

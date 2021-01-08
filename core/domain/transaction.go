@@ -1,12 +1,11 @@
 package domain
 
 type Transaction struct {
-	ID        string
-	Status    string
-	Amount    float64
-	Currency  string
-	Mode      string
-	AccountId string
+	ID        string `json:"id"`
+	Status    string `json:"status"`
+	Amount    float64 `json:"amount"`
+	Mode      string `json:"mode"`
+	AccountId string `json:"account_id"`
 }
 var APPROVED_STATUS = "approved"
 var REJECTED_STATUS = "rejected"

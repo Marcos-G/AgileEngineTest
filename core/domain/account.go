@@ -1,7 +1,7 @@
 package domain
 
 type Account struct {
-	ID            string
-	DebitBalance  float64
-	CreditBalance float64
+	ID            string `json:"id"`
+	DebitBalance  float64 `json:"debit_balance"`
+	CreditBalance float64 `json:"credit_balance"`
 }

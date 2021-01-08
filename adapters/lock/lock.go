@@ -1,7 +1,13 @@
 package lock
 
+import "example.com/test_task/core/ports"
+
 type lock struct {
 	lock map[string]bool
+}
+
+func New()ports.Lock{
+	return &lock{map[string]bool{}}
 }
 
 func (l *lock) Acquire(id string) error {

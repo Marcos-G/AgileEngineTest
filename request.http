@@ -1,7 +1,23 @@
-POST localhost:8080/somefile
+GET localhost:8080/account
 
-{"msg":{
-"user_id":529375811,
-"version":0
+###
+
+PUT localhost:8080/account/credit/balance
+Content-Type: application/json
+
+{
+"balance": 20.0
 }
+
+###
+
+POST localhost:8080/transaction
+Content-Type: application/json
+
+{
+"amount": 200,
+  "mode": "credit"
 }
+
+###
+GET localhost:8080/transaction/id

@@ -1,33 +1,33 @@
 package dependencies
 
 import (
-	"example.com/test_task/AgileEngineTest/adapters/repositories/accountsrepo"
-	"example.com/test_task/AgileEngineTest/adapters/repositories/transactionsrepo"
-	"example.com/test_task/AgileEngineTest/core/ports"
-	"example.com/test_task/AgileEngineTest/core/services/account"
-	"example.com/test_task/AgileEngineTest/core/services/credit"
-	"example.com/test_task/AgileEngineTest/core/services/debit"
-	"example.com/test_task/AgileEngineTest/pkg"
+	"example.com/test_task/adapters/lock"
+	"example.com/test_task/adapters/repositories/accountsrepo"
+	"example.com/test_task/adapters/repositories/transactionsrepo"
+	"example.com/test_task/core/domain"
+	"example.com/test_task/core/ports"
+	"example.com/test_task/core/services/account"
+	"example.com/test_task/core/services/transactions"
+	"example.com/test_task/pkg"
 )
 
 var (
 	AccountService ports.AccountsService
-	DebitService   ports.DebitService
-	CreditService  ports.CreditService
+	TransactionsService  ports.TransactionsService
 )
 
-func Bind(){
-	if true{
+func Bind() {
+	if true {
 		BindUniqueEnv()
 	}
 }
 
-
 func BindUniqueEnv() {
 	accountsRepo := accountsrepo.New(&pkg.AccountsClient{})
+	accountsRepo.Save(&domain.Account{ID: "unique_account",DebitBalance: 100,CreditBalance: 500})
 	transactionsRepo := transactionsrepo.New(&pkg.TransactionsClient{})
+	lock := lock.New()
 
-	AccountService = account.New(accountsRepo)
-	CreditService = credit.New(accountsRepo,transactionsRepo)
-	DebitService = debit.New(accountsRepo,transactionsRepo)
+	AccountService = account.New(accountsRepo,transactionsRepo,lock)
+	TransactionsService = transactions.New(accountsRepo, transactionsRepo,lock)
 }
